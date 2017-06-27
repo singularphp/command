@@ -1,0 +1,19 @@
+{
+    "name": "singular/command",
+    "description": "Provedor de serviços dos comandos do console do Singualr Framework",
+    "authors": [
+        {
+            "name": "Otávio Fernandes",
+            "email": "otavio@netonsolucoes.com.br"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "singular/console": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    }
+}
