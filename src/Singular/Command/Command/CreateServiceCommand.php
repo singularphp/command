@@ -5,28 +5,33 @@ namespace Singular\Command\Command;
 use Singular\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
- * Classe do comando de criação de um pacote.
+ * Classe do comando de criação de um serviço.
  *
  * @author Otávio Fernandes <otavio@netonsolucoes.com.br>
  */
-class CreatePackCommand extends Command
+class CreateServiceCommand extends Command
 {
     /**
      * Configura o comando.
      */
     public function configure()
     {
-        $this->setName('backend:create-pack')
-            ->setDescription('Cria e habilita um novo pacote na aplicação')
-            ->setHelp('Para criar um novo pacote, informe o nome do pacote a ser criado. Ex.: singular backend:create-pack Sessao')
+        $this->setName('backend:create-service')
+            ->setDescription('Cria um novo serviço num pacote')
+            ->setHelp('Para criar um novo serviço, informe o nome do serviço a ser criado e do pacote. Ex.: singular backend:create-service Servico Sessao')
+            ->addArgument(
+                'servico',
+                InputArgument::REQUIRED,
+                'Nome do serviço a ser criado. Ex.: Servico'
+            )
             ->addArgument(
                 'pacote',
                 InputArgument::REQUIRED,
-                'Nome do pacote a ser criado. Ex.: Sessao'
+                'Nome do pacote onde o serviço será criado. Ex.: Session'
             )
             ->addOption(
                 'author',
@@ -40,10 +45,13 @@ class CreatePackCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Email do autor do pacote a ser criado. Ex.: otavio@neton.com.br'
             );
+
+            
+        ;
     }
 
     /**
-     * Executa o comando de criação do pacote.
+     * Executa o comando de criação do serviço.
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -51,9 +59,11 @@ class CreatePackCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
+        $service = $input->getArgument('servico');
         $pack = $input->getArgument('pacote');
+
         $author = $input->getOption('author');
-        
+
         if (!$author) {
             if (isset($app['author.name'])) {
                 $author = $app['author.name'];
@@ -73,11 +83,8 @@ class CreatePackCommand extends Command
         }
 
         try {
-            $app['singular.service.pack']->create($pack, $author, $email);
-            $output->writeln(sprintf('<info>Pacote "%s" criado com sucesso!</info>',$pack));
-
-            $app['singular.service.pack']->enable($pack);
-            $output->writeln(sprintf('<info>Pacote "%s" ativado com sucesso!</info>', $pack));
+            $app['singular.service.service']->create($service, $pack, $author, $email);
+            $output->writeln(sprintf('<info>Serviço "%s" criado com sucesso no pacote %s!</info>',$service, $pack));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
         }

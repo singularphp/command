@@ -5,28 +5,39 @@ namespace Singular\Command\Command;
 use Singular\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
- * Classe do comando de criação de um pacote.
+ * Classe do comando de criação de um controlador.
  *
  * @author Otávio Fernandes <otavio@netonsolucoes.com.br>
  */
-class CreatePackCommand extends Command
+class CreateControllerCommand extends Command
 {
     /**
      * Configura o comando.
      */
     public function configure()
     {
-        $this->setName('backend:create-pack')
-            ->setDescription('Cria e habilita um novo pacote na aplicação')
-            ->setHelp('Para criar um novo pacote, informe o nome do pacote a ser criado. Ex.: singular backend:create-pack Sessao')
+        $this->setName('backend:create-controller')
+            ->setDescription('Cria um novo controlador num pacote')
+            ->setHelp('Para criar um novo controlador, informe o nome do controlador a ser criado e do pacote. Ex.: singular backend:create-controller Controlador Sessao')
+            ->addArgument(
+                'controlador',
+                InputArgument::REQUIRED,
+                'Nome do controlador a ser criado. Ex.: Controlador'
+            )
             ->addArgument(
                 'pacote',
                 InputArgument::REQUIRED,
-                'Nome do pacote a ser criado. Ex.: Sessao'
+                'Nome do pacote onde o comando será criado. Ex.: Session'
+            )
+            ->addOption(
+                'crud',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Se o controlador a ser criado irá herdar os métodos do controlador de crud do singular'
             )
             ->addOption(
                 'author',
@@ -40,10 +51,13 @@ class CreatePackCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Email do autor do pacote a ser criado. Ex.: otavio@neton.com.br'
             );
+
+            
+        ;
     }
 
     /**
-     * Executa o comando de criação do pacote.
+     * Executa o comando de criação do comando.
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -51,9 +65,11 @@ class CreatePackCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
+        $controller = $input->getArgument('controlador');
         $pack = $input->getArgument('pacote');
+        $crud = (bool) $input->getOption('crud');
         $author = $input->getOption('author');
-        
+
         if (!$author) {
             if (isset($app['author.name'])) {
                 $author = $app['author.name'];
@@ -73,11 +89,8 @@ class CreatePackCommand extends Command
         }
 
         try {
-            $app['singular.service.pack']->create($pack, $author, $email);
-            $output->writeln(sprintf('<info>Pacote "%s" criado com sucesso!</info>',$pack));
-
-            $app['singular.service.pack']->enable($pack);
-            $output->writeln(sprintf('<info>Pacote "%s" ativado com sucesso!</info>', $pack));
+            $app['singular.service.controller']->create($controller, $pack, $author, $email, $crud);
+            $output->writeln(sprintf('<info>Controlador "%s" criado com sucesso no pacote %s!</info>',$controller, $pack));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
         }
