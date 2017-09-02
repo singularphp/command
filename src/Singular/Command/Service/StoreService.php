@@ -44,7 +44,7 @@ class StoreService
      *
      * @throws \Exception
      */
-    public function create($store, $pack, $model, $author, $email)
+    public function create($store, $pack, $table, $author, $email)
     {
         $fs = new Filesystem();
 
@@ -64,7 +64,7 @@ class StoreService
 
         $template = str_replace('$NAMESPACE',ucfirst($pack), $template);
         $template = str_replace('$STORE', $store , $template);
-        $template = str_replace('$$model', ucfirst($pack)."\\Model\\".$model , $template);
+        $template = str_replace('$TABLE', $table , $template);
         $template = str_replace('$author', $author, $template);
         $template = str_replace('$email', $email, $template);
 

@@ -36,7 +36,7 @@ class CreateStoreCommand extends Command
                 'Nome do pacote onde o store será criado. Ex.: Session'
             )
             ->addArgument(
-                'model',
+                'table',
                 InputArgument::REQUIRED,
                 'Modelo vinculado ao store. Ex.: Modelo'
             )
@@ -68,7 +68,7 @@ class CreateStoreCommand extends Command
         $app = $this->getSilexApplication();
         $store = $input->getArgument('store');
         $pack = $input->getArgument('pacote');
-        $model = $input->getArgument('model');
+        $table = $input->getArgument('table');
 
         $author = $input->getOption('author');
 
@@ -91,7 +91,7 @@ class CreateStoreCommand extends Command
         }
 
         try {
-            $app['singular.service.store']->create($store, $pack, $model, $author, $email);
+            $app['singular.service.store']->create($store, $pack, $table, $author, $email);
             $output->writeln(sprintf('<info>Store "%s" criado com sucesso no pacote %s!</info>',$store, $pack));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));

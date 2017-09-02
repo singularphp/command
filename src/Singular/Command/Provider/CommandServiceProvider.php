@@ -20,6 +20,8 @@ use Singular\Command\Service\ModelService;
 use Singular\Command\Service\PackService;
 use Singular\Command\Service\ServiceService;
 use Singular\Command\Service\StoreService;
+use Singular\Command\Service\ModuleService;
+use Singular\Command\Command\CreateModuleCommand;
 
 class CommandServiceProvider implements ServiceProviderInterface, BootableProviderInterface
 {
@@ -65,10 +67,9 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
             );
         };
 
-        $pimple['singular.service.model'] = function() use ($pimple) {
-            return new ModelService(
-                $pimple['singular.directory.src'],
-                $pimple['singular.service.pack']
+        $pimple['singular.service.module'] = function() use ($pimple) {
+            return new ModuleService(
+                $pimple['injector.directory.src']
             );
         };
 
@@ -103,6 +104,10 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
         $pimple['singular.command.create_model'] = function () {
             return new CreateModelCommand();
         };
+
+        $pimple['singular.command.create_module'] = function () {
+            return new CreateModuleCommand();
+        };
     }
 
     /**
@@ -125,6 +130,6 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
         $app['console']->add($app['singular.command.create_service']);
         $app['console']->add($app['singular.command.create_controller']);
         $app['console']->add($app['singular.command.create_store']);
-        $app['console']->add($app['singular.command.create_model']);
+        $app['console']->add($app['singular.command.create_module']);
     }
 }

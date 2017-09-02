@@ -5,41 +5,34 @@ namespace Singular\Command\Command;
 use Singular\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Classe do comando de criação de um store.
+ * Classe do comando de criação de um pacote.
  *
  * @author Otávio Fernandes <otavio@netonsolucoes.com.br>
  */
-class CreateModelCommand extends Command
+class CreateModuleCommand extends Command
 {
     /**
      * Configura o comando.
      */
     public function configure()
     {
-        $this->setName('backend:create-model')
-            ->setDescription('Cria um novo model num pacote')
-            ->setHelp('Para criar um novo model, informe o nome do model a ser criado, do pacote e da tabela. 
-                Ex.: singular backend:create-model Model Sessao --table=nome_tabela'
-            )
+        $this->setName('frontend:create-module')
+            ->setDescription('Cria um módulo na aplicação')
+            ->setHelp('Para criar um novo módulo, informe o nome do módulo a ser criado. Ex.: singular frontend:create-module usuario')
             ->addArgument(
-                'model',
+                'modulo',
                 InputArgument::REQUIRED,
-                'Nome do model a ser criado. Ex.: Model'
-            )
-            ->addArgument(
-                'pacote',
-                InputArgument::REQUIRED,
-                'Nome do pacote onde o store será criado. Ex.: Session'
+                'Nome do modulo a ser criado. Ex.: usuario'
             )
             ->addOption(
-                'table',
+                'dir',
                 null,
-                InputOption::VALUE_REQUIRED,
-                'Tabela vinculada ao modelo. Ex.: nome_tabela'
+                InputOption::VALUE_OPTIONAL,
+                'Diretório onde o módulo será criado. Ex.: cadastro'
             )
             ->addOption(
                 'author',
@@ -53,13 +46,10 @@ class CreateModelCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Email do autor do pacote a ser criado. Ex.: otavio@neton.com.br'
             );
-
-            
-        ;
     }
 
     /**
-     * Executa o comando de criação do comando.
+     * Executa o comando de criação do pacote.
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -67,16 +57,9 @@ class CreateModelCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
-        $pack = $input->getArgument('pacote');
-        $model = $input->getArgument('model');
-        $table = $input->getOption('table');
-
-        if (!$table) {
-            $table = strtolower($model);
-        }
-
+        $module = $input->getArgument('modulo');
         $author = $input->getOption('author');
-
+        
         if (!$author) {
             if (isset($app['author.name'])) {
                 $author = $app['author.name'];
@@ -95,9 +78,15 @@ class CreateModelCommand extends Command
             }
         }
 
+        $dir = $input->getOption('dir');
+
+        if (!$dir) {
+            $dir = '';
+        }
+
         try {
-            $app['singular.service.model']->create($model, $pack, $table, $author, $email);
-            $output->writeln(sprintf('<info>Modelo "%s" criado com sucesso no pacote %s!</info>',$model, $pack));
+            $app['singular.service.module']->create($module, $dir, $author, $email);
+            $output->writeln(sprintf('<info>Módulo "%s" criado com sucesso!</info>',$module));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
         }

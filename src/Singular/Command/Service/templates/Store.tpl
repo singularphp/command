@@ -1,5 +1,6 @@
 <?php
-namespace $NAMESPACE\Store;
+
+namespace Sessao\Store;
 
 use Singular\SingularStore;
 use Singular\Annotation\Service;
@@ -16,9 +17,23 @@ use Singular\Annotation\Parameter;
 class $STORE extends SingularStore
 {
     /**
-     * Classe do modelo vinculado ao store.
+     * Tabela relacionada no banco de dados.
      *
      * @var string
      */
-    protected $modelClass = '$model';
+    protected $table = '$TABLE';
+
+    /**
+     * Perfis de consulta.
+     *
+     * @var array
+     */
+    protected $profiles = [
+        'default' => [
+            'select' => ['t.*'],
+            'joins' => [],
+            'filters' => [],
+            'groupings' => []
+        ]
+    ];
 }
