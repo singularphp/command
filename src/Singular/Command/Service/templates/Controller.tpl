@@ -3,6 +3,7 @@ namespace $NAMESPACE\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Singular\SingularController;
+use Singular\Crud;
 use Singular\Annotation\Controller;
 use Singular\Annotation\Route;
 use Singular\Annotation\Direct;
@@ -21,6 +22,8 @@ use Singular\Annotation\Before;
  */
 class $CONTROLLER extends SingularController
 {
+    use Crud;
+
     /**
      * Defina o store padrão do controlador.
      *

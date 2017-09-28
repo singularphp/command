@@ -13,26 +13,34 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Otávio Fernandes <otavio@netonsolucoes.com.br>
  */
-class CreateModuleCommand extends Command
+class CreateFrontViewCommand extends Command
 {
     /**
      * Configura o comando.
      */
     public function configure()
     {
-        $this->setName('frontend:create-module')
-            ->setDescription('Cria um módulo de frontend na aplicação')
-            ->setHelp('Para criar um novo módulo, informe o nome do módulo a ser criado. Ex.: singular frontend:create-module usuario')
-            ->addArgument(
-                'modulo',
-                InputArgument::REQUIRED,
-                'Nome do modulo a ser criado. Ex.: usuario'
+        $this->setName('frontend:create-view')
+            ->setDescription('Cria uma view de frontend para um módulo na aplicação')
+            ->setHelp(
+                'Para criar uma nova view, informe o nome da view a ser criada, 
+                e o diretório do módulo. 
+                Ex.: singular frontend:create-view usuario.form cadastro/usuario'
             )
-            ->addOption(
+            ->addArgument(
+                'view',
+                InputArgument::REQUIRED,
+                'Nome da view a ser criada. Ex.: usuario'
+            )
+            ->addArgument(
                 'dir',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Diretório onde o módulo será criado. Ex.: cadastro'
+                InputArgument::REQUIRED,
+                'Diretório do módulo onde o controlador  será criado. Ex.: cadastro/usuario'
+            )
+            ->addArgument(
+                'type',
+                InputArgument::REQUIRED,
+                'Tipo de view a ser criada. [list, form, tab, modal, filter]'
             )
             ->addOption(
                 'author',
@@ -57,7 +65,10 @@ class CreateModuleCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
-        $module = $input->getArgument('modulo');
+        $view = $input->getArgument('view');
+        $dir = $input->getArgument('dir');
+        $type = $input->getArgument('type');
+
         $author = $input->getOption('author');
         
         if (!$author) {
@@ -77,16 +88,10 @@ class CreateModuleCommand extends Command
                 $email = 'author@email.com';
             }
         }
-
-        $dir = $input->getOption('dir');
-
-        if (!$dir) {
-            $dir = '';
-        }
-
+        
         try {
-            $app['singular.service.module']->create($module, $dir, $author, $email);
-            $output->writeln(sprintf('<info>Módulo "%s" criado com sucesso!</info>',$module));
+            $app['singular.service.front_view']->create($view, $dir, $type, $author, $email);
+            $output->writeln(sprintf('<info>View "%s" criada com sucesso!</info>',$view));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
         }

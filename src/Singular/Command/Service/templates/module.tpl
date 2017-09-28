@@ -22,7 +22,7 @@
      *
      * @param {$stateProvider} $stateProvider
      */
-    function confiFn(
+    function configFn(
         $stateProvider
     ){
         $stateProvider.state('', {
@@ -40,7 +40,7 @@
      * @returns {string}
      */
     function getView(view) {
-        return '$moduleDir/views/' + view + '.html';
+        return 'src/$moduleDir/views/' + view + '.html';
     }
 
 }());
