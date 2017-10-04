@@ -7,6 +7,7 @@ use Silex\Application;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\BootableProviderInterface;
 use Singular\Command\Command\CreateCommandCommand;
+use Singular\Command\Command\CreateComponentMigrationCommand;
 use Singular\Command\Command\CreateControllerCommand;
 use Singular\Command\Command\CreatePackCommand;
 use Singular\Command\Command\CreateServiceCommand;
@@ -24,6 +25,7 @@ use Singular\Command\Command\CreateFrontControllerCommand;
 use Singular\Command\Service\FrontControllerService;
 use Singular\Command\Command\CreateFrontViewCommand;
 use Singular\Command\Service\FrontViewService;
+use Singular\Command\Service\ComponentService;
 
 class CommandServiceProvider implements ServiceProviderInterface, BootableProviderInterface
 {
@@ -87,6 +89,13 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
             );
         };
 
+        $pimple['singular.service.create_component_migration'] = function() use ($pimple) {
+            return new ComponentService(
+                $pimple['singular.directory.root'],
+                $pimple['db']
+            );
+        };
+
         $pimple['singular.command.create_pack'] = function () {
             return new CreatePackCommand();
         };
@@ -126,6 +135,10 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
         $pimple['singular.command.create_front_view'] = function () {
             return new CreateFrontViewCommand();
         };
+
+        $pimple['singular.command.create_component_migration'] = function () {
+            return new CreateComponentMigrationCommand();
+        };
     }
 
     /**
@@ -151,5 +164,6 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
         $app['console']->add($app['singular.command.create_module']);
         $app['console']->add($app['singular.command.create_front_controller']);
         $app['console']->add($app['singular.command.create_front_view']);
+        $app['console']->add($app['singular.command.create_component_migration']);
     }
 }
