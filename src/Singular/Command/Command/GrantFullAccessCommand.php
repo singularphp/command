@@ -13,16 +13,22 @@ use Symfony\Component\Console\Input\InputOption;
  *
  * @author Otávio Fernandes <otavio@netonsolucoes.com.br>
  */
-class CreateComponentMigrationCommand extends Command
+class GrantFullAccessCommand extends Command
 {
     /**
      * Configura o comando.
      */
     public function configure()
     {
-        $this->setName('component:create-migration')
-            ->setDescription('Cria migrations para inclusão dos componentes no banco de dados')
-            ->setHelp('Para criar uma nova migration: singular component:create-migration');
+        $this->setName('component:grant-full-access')
+            ->setDescription('Concede permissão de acesso a todos os componentes para um perfil')
+            ->setHelp('Para garantir acesso para um perfil: singular component:grant-full-access 12')
+            ->addArgument(
+                'perfil',
+                InputArgument::REQUIRED,
+                'ID do perfil que terá acesso garantido. Ex.: 12'
+            );
+
     }
 
     /**
@@ -34,10 +40,11 @@ class CreateComponentMigrationCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
+        $perfil = $input->getArgument('perfil');
 
         try {
-            $count = $app['singular.service.component']->create();
-            $output->writeln(sprintf('<info>Migrations de %d componentes criadas com sucesso!</info>',$count));
+            $app['singular.service.component']->grantFullAccess($perfil);
+            $output->writeln(sprintf('<info>Acesso garantido para o perfil %d!</info>',$perfil));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
         }

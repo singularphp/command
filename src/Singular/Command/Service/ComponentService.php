@@ -65,11 +65,33 @@ class ComponentService
         $template = str_replace('$TIMESTAMP',$timestamp, $template);
         $template = str_replace('$COMPONENTS', $this->arrayToString($components, $timestamp) , $template);
 
-        $this->clear();
+        $this->clearMigrations();
 
         file_put_contents($migrationDir.DIRECTORY_SEPARATOR.$date.'_insere_registros_componentes_'.$timestamp.'.php', $template);
 
         return count($components);
+    }
+
+    /**
+     * Garante o acesso completo a todos os componentes para um determinado perfil.
+     *
+     * @param integer $perfilId
+     */
+    public function grantFullAccess($perfilId)
+    {
+        if (!$this->checkPerfilExists($perfilId)) {
+            throw new \Exception(sprintf('O Perfil informado não existe!'));
+        }
+
+        // recupera a relação de todos os componentes
+        $components = $this->getComponents();
+
+        // apaga os registros de permissão do perfil
+        $this->clearPermissions($perfilId);
+
+        foreach ($components as $component) {
+            $this->grantAccess($perfilId, $component['id']);
+        }
     }
 
     /**
@@ -124,11 +146,53 @@ class ComponentService
     }
 
     /**
+     * Retorna a relação de todos os componentes registrados na aplicação.
+     *
+     * @return array
+     */
+    private function getComponents()
+    {
+        $db = $this->db;
+
+        $components = $db->fetchAll('SELECT * FROM singular_componente');
+
+        return $components;
+    }
+
+    /**
+     * Remove todas as permissões de um determinado perfil de usuário.
+     *
+     * @param integer $perfilId
+     */
+    private function clearPermissions($perfilId)
+    {
+        $db = $this->db;
+
+        $db->executeQuery('DELETE FROM singular_permissao WHERE perfil_id = '.$perfilId);
+    }
+
+    /**
+     * Garante acesso em um componente há um perfil.
+     *
+     * @param integer $perfilId
+     * @param integer $componentId
+     */
+    private function grantAccess($perfilId, $componentId)
+    {
+        $permissao = [
+            'perfil_id' => $perfilId,
+            'componente_id' => $componentId
+        ];
+
+        $this->db->insert('singular_permissao', $permissao);
+    }
+
+    /**
      * Recupera a relação de componentes que farão parte da migrations.
      *
      * @return array
      */
-    private function clear()
+    private function clearMigrations()
     {
         $db = $this->db;
 
@@ -143,6 +207,22 @@ class ComponentService
     private function getMigrationDir()
     {
         return $this->sourceDir.DIRECTORY_SEPARATOR."db".DIRECTORY_SEPARATOR."migrations";
+    }
+
+    /**
+     * Verifica se um perfil existe.
+     *
+     * @param integer $perfilId
+     *
+     * @return bool
+     */
+    private function checkPerfilExists($perfilId)
+    {
+        $db = $this->db;
+
+        $perfil = $db->fetchAssoc('SELECT * FROM singular_perfil WHERE id = '.$perfilId);
+
+        return is_array($perfil) ? true : false;
     }
 
 }

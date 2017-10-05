@@ -14,6 +14,7 @@ use Singular\Command\Command\CreateServiceCommand;
 use Singular\Command\Command\CreateStoreCommand;
 use Singular\Command\Command\DisablePackCommand;
 use Singular\Command\Command\EnablePackCommand;
+use Singular\Command\Command\GrantFullAccessCommand;
 use Singular\Command\Service\CommandService;
 use Singular\Command\Service\ControllerService;
 use Singular\Command\Service\PackService;
@@ -89,7 +90,7 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
             );
         };
 
-        $pimple['singular.service.create_component_migration'] = function() use ($pimple) {
+        $pimple['singular.service.component'] = function() use ($pimple) {
             return new ComponentService(
                 $pimple['singular.directory.root'],
                 $pimple['db']
@@ -139,6 +140,10 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
         $pimple['singular.command.create_component_migration'] = function () {
             return new CreateComponentMigrationCommand();
         };
+
+        $pimple['singular.command.grant_full_access'] = function () {
+            return new GrantFullAccessCommand();
+        };
     }
 
     /**
@@ -165,5 +170,6 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
         $app['console']->add($app['singular.command.create_front_controller']);
         $app['console']->add($app['singular.command.create_front_view']);
         $app['console']->add($app['singular.command.create_component_migration']);
+        $app['console']->add($app['singular.command.grant_full_access']);
     }
 }
