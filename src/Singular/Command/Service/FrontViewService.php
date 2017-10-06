@@ -97,14 +97,11 @@ class FrontViewService
      */
     private function createView($view, $viewFile, $type, $moduleDir)
     {
-//        $viewDir = str_replace($this->jsDir, '', $moduleDir.DIRECTORY_SEPARATOR."views");
-
         $template = file_get_contents(
             __DIR__.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."view_".$type.".tpl"
         );
 
-//        $template = str_replace('$viewDir', $viewDir, $template);
-        $template = str_replace('$view', $view, $template);
+        $template = str_replace('$VIEW', $view, $template);
 
         file_put_contents($viewFile, $template);
     }

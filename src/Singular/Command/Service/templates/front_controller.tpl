@@ -13,6 +13,7 @@
             '$scope',
             '$state',
             '$modal',
+            '$modalInstance,
             '$localStorage',
             'SweetAlert',
             'toaster',
@@ -26,6 +27,7 @@
      * @param $scope
      * @param $state
      * @param $modal
+     * @param $modalInstance
      * @param $localStorage
      * @param SweetAlert
      * @param toaster
@@ -35,6 +37,7 @@
         $scope,
         $state,
         $modal,
+        $modalInstance,
         $localStorage,
         SweetAlert,
         toaster
