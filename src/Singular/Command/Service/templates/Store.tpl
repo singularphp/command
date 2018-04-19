@@ -1,6 +1,6 @@
 <?php
 
-namespace Sessao\Store;
+namespace $NAMESPACE\Store;
 
 use Singular\SingularStore;
 use Singular\Annotation\Service;
