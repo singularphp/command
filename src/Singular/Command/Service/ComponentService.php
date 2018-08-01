@@ -57,7 +57,8 @@ class ComponentService
             __DIR__.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."migration.tpl"
         );
 
-        $date = date('Ymdhis');
+        $dt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $date = $dt->format('YmdHis');
         $timestamp = time();
 
         $components = $this->getComponentsToMigration();

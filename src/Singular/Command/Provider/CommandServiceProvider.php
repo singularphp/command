@@ -9,6 +9,7 @@ use Silex\Api\BootableProviderInterface;
 use Singular\Command\Command\CreateCommandCommand;
 use Singular\Command\Command\CreateComponentMigrationCommand;
 use Singular\Command\Command\CreateControllerCommand;
+use Singular\Command\Command\CreateMenuMigrationCommand;
 use Singular\Command\Command\CreatePackCommand;
 use Singular\Command\Command\CreateServiceCommand;
 use Singular\Command\Command\CreateStoreCommand;
@@ -17,6 +18,7 @@ use Singular\Command\Command\EnablePackCommand;
 use Singular\Command\Command\GrantFullAccessCommand;
 use Singular\Command\Service\CommandService;
 use Singular\Command\Service\ControllerService;
+use Singular\Command\Service\MenuService;
 use Singular\Command\Service\ModuleServiceService;
 use Singular\Command\Service\PackService;
 use Singular\Command\Service\ServiceService;
@@ -81,9 +83,10 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
             );
         };
 
-        $pimple['singular.service.module_service'] = function() use ($pimple) {
-            return new ModuleServiceService(
-                $pimple['injector.directory.src']
+        $pimple['singular.service.menu'] = function() use ($pimple) {
+            return new MenuService(
+                $pimple['singular.directory.root'],
+                $pimple['db']
             );
         };
 
@@ -160,6 +163,10 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
             return new CreateComponentMigrationCommand();
         };
 
+        $pimple['singular.command.create_menu_migration'] = function () {
+            return new CreateMenuMigrationCommand();
+        };
+
         $pimple['singular.command.grant_full_access'] = function () {
             return new GrantFullAccessCommand();
         };
@@ -190,6 +197,7 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
         $app['console']->add($app['singular.command.create_front_service']);
         $app['console']->add($app['singular.command.create_front_view']);
         $app['console']->add($app['singular.command.create_component_migration']);
+        $app['console']->add($app['singular.command.create_menu_migration']);
         $app['console']->add($app['singular.command.grant_full_access']);
     }
 }

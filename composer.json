@@ -9,7 +9,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "singular/console": "2.0",
+        "singular/console": "dev-master",
         "symfony/filesystem": "^3.3"
     },
     "autoload": {
