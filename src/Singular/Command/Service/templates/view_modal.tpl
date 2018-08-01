@@ -10,7 +10,7 @@
                 <div class="form-group col-sm-12">
                     <label class="control-label" for="perfil">Field </label>
                     <input class="form-control" type="text" autofocus placeholder="Field" id="field" name="field" ng-model="field" ng-maxlength="255" required>
-                    <ng-messages for="forms.modal.field.$error" role="alert" ng-if="Store.checkField(forms.modal.field)">
+                    <ng-messages for="forms.modal.field.$error" role="alert" ng-if="isSubmited || forms.modal.field.$touched">
                         <ng-message when="required" class="label label-danger">Field é obrigatório</ng-message>
                         <ng-message when="maxlength" class="label label-danger">O tamanho é 255</ng-message>
                     </ng-messages>

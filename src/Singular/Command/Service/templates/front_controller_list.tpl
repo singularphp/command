@@ -14,6 +14,7 @@
             ,'toaster'
             ,'$sngApi'
             ,'$sngFilter'
+            ,'$sngPaging'
             ,Controller
         ]
     );
@@ -25,6 +26,7 @@
      * @param toaster
      * @param $sngApi
      * @param $sngFilter
+     * @param $sngPaging
      * @constructor
      */
     function Controller(
@@ -32,6 +34,7 @@
         ,toaster
         ,$sngApi
         ,$sngFilter
+        ,$sngPaging
     ) {
         /**
          * Referência local ao serviço do filtro.
@@ -42,12 +45,20 @@
         $scope.filtro = $sngFilter('url_template_do_filtro');
 
         /**
+         * Referência local ao serviço da paginação.
+         *
+         * @todo Alterar a url do template
+         * @type {$sngPaging}
+         */
+        $scope.paging = $sngFilter();
+
+        /**
          * Api de comunicação com o controlador no backend.
          *
          * @todo Alterar o valor do pacote/controlador
          * @type {$sngApi}
          */
-        $scope.api = $sngApi('pacote/controlador', $scope.filtro);
+        $scope.api = $sngApi('pacote/controlador', $scope.filtro, $scope.paging);
 
         /**
          * Configuração de ordenação padrão.
