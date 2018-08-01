@@ -11,7 +11,7 @@
         '$name',
         [
             '$scope'
-            ,'toaster'
+            ,'toastr'
             ,'$sngApi'
             ,'$sngFilter'
             ,'$sngPaging'
@@ -23,7 +23,7 @@
      * Função de definição do controlador.
      *
      * @param $scope
-     * @param toaster
+     * @param toastr
      * @param $sngApi
      * @param $sngFilter
      * @param $sngPaging
@@ -31,7 +31,7 @@
      */
     function Controller(
          $scope
-        ,toaster
+        ,toastr
         ,$sngApi
         ,$sngFilter
         ,$sngPaging

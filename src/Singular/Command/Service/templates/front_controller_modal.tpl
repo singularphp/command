@@ -12,7 +12,7 @@
         [
              '$scope'
             ,'$uibModalInstance'
-            ,'toaster'
+            ,'toastr'
             ,'$sngApi'
             ,Controller
         ]
@@ -23,14 +23,14 @@
      *
      * @param $scope
      * @param $uibModalInstance
-     * @param toaster
+     * @param toastr
      * @param $sngApi
      * @constructor
      */
     function Controller(
          $scope
         ,$uibModalInstance
-        ,toaster
+        ,toastr
         ,$sngApi
     ) {
         /**

@@ -14,7 +14,7 @@
             ,'$state'
             ,'$uibModal'
             ,'SweetAlert'
-            ,'toaster'
+            ,'toastr'
             ,'$sngApi'
             ,Controller
         ]
@@ -27,7 +27,7 @@
      * @param $state
      * @param $modal
      * @param SweetAlert
-     * @param toaster
+     * @param toastr
      * @param $sngApi
      * @constructor
      */
@@ -36,7 +36,7 @@
         ,$state
         ,$modal
         ,SweetAlert
-        ,toaster
+        ,toastr
         ,$sngApi
     ) {
         /**
