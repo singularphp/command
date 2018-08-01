@@ -22,17 +22,18 @@ class CreateModuleCommand extends Command
     {
         $this->setName('frontend:create-module')
             ->setDescription('Cria um módulo de frontend na aplicação')
-            ->setHelp('Para criar um novo módulo, informe o nome do módulo a ser criado. Ex.: singular frontend:create-module usuario')
+            ->setHelp('Para criar um novo módulo, informe o nome do módulo a ser criado. Opcionalmente informe o diretório destino.
+Exemplo: <info>singular frontend:create-module app.usuario --dir=secure</info>')
             ->addArgument(
                 'modulo',
                 InputArgument::REQUIRED,
-                'Nome do modulo a ser criado. Ex.: usuario'
+                'Nome do modulo a ser criado. Ex.: app.usuario'
             )
             ->addOption(
                 'dir',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Diretório onde o módulo será criado. Ex.: cadastro'
+                'Diretório onde o módulo será criado, a partir do diretório web/src. Ex.: cadastro'
             )
             ->addOption(
                 'author',
@@ -85,7 +86,8 @@ class CreateModuleCommand extends Command
         }
 
         try {
-            $app['singular.service.module']->create($module, $dir, $author, $email);
+            $moduleDir = $app['singular.service.module']->create($module, $dir, $author, $email);
+//            $app['singular.service.module_service']->create($module, $moduleDir, $author, $email);
             $output->writeln(sprintf('<info>Módulo "%s" criado com sucesso!</info>',$module));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));

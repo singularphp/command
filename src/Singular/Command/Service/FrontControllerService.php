@@ -31,12 +31,13 @@ class FrontControllerService
      * @param string $name
      * @param string $module
      * @param string $dir
+     * @param string $type
      * @param string $author
      * @param string $email
      *
      * @throws \Exception
      */
-    public function create($name, $module, $dir, $author, $email)
+    public function create($name, $module, $dir, $type, $author, $email)
     {
         $fs = new Filesystem();
 
@@ -56,7 +57,7 @@ class FrontControllerService
             throw new \Exception(sprintf('O controlador %s já existe!', $name));
         }
 
-        $this->createController($name, $controllerFile, $module, $author, $email);
+        $this->createController($name, $controllerFile, $module, $type, $author, $email);
     }
 
     /**
@@ -90,21 +91,28 @@ class FrontControllerService
      * @param string $name
      * @param string $controllerFile
      * @param string $module
+     * @param string $type
      * @param string $author
      * @param string $email
      */
-    private function createController($name, $controllerFile, $module, $author, $email)
+    private function createController($name, $controllerFile, $module, $type, $author, $email)
     {
-        $template = file_get_contents(
-            __DIR__.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."front_controller.tpl"
-        );
+        $templateFile = __DIR__.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."front_controller_".$type.".tpl";
 
-        $template = str_replace('$name', $name, $template);
-        $template = str_replace('$module',$module, $template);
-        $template = str_replace('$author', $author, $template);
-        $template = str_replace('$email', $email, $template);
+        if (file_exists($templateFile)) {
+            $template = file_get_contents(
+                $templateFile
+            );
 
-        file_put_contents($controllerFile.'.js', $template);
+            $template = str_replace('$name', $name, $template);
+            $template = str_replace('$module',$module, $template);
+            $template = str_replace('$author', $author, $template);
+            $template = str_replace('$email', $email, $template);
+
+            file_put_contents($controllerFile.'.js', $template);
+        } else {
+            throw new \Exception('Não foi encontrado template válido para o tipo de controlador type='.$type);
+        }
     }
 
     /**

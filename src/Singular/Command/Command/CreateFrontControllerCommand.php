@@ -23,9 +23,8 @@ class CreateFrontControllerCommand extends Command
         $this->setName('frontend:create-controller')
             ->setDescription('Cria um controlador de frontend na aplicação')
             ->setHelp(
-                'Para criar um novo controlador, informe o nome do controlador a ser criado, 
-                o módulo e o diretório do módulo. 
-                Ex.: singular frontend:create-controller usuario.ListCtrl singular.usuario cadastro/usuario'
+                'Para criar um novo controlador, informe o nome do controlador a ser criado, o módulo e o diretório do módulo. 
+    Exemplo: <info>singular frontend:create-controller usuario.ListCtrl singular.usuario cadastro/usuario --type=common</info>'
             )
             ->addArgument(
                 'controlador',
@@ -41,6 +40,12 @@ class CreateFrontControllerCommand extends Command
                 'dir',
                 InputArgument::REQUIRED,
                 'Diretório do módulo onde o controlador  será criado. Ex.: cadastro/usuario'
+            )
+            ->addOption(
+                'type',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Tipo de controlador a ser criado. [list, form, modal, common]'
             )
             ->addOption(
                 'author',
@@ -69,6 +74,8 @@ class CreateFrontControllerCommand extends Command
         $modulo = $input->getArgument('modulo');
         $dir = $input->getArgument('dir');
 
+        $type = $input->getOption('type') ?: 'common';
+
         $author = $input->getOption('author');
         
         if (!$author) {
@@ -90,7 +97,7 @@ class CreateFrontControllerCommand extends Command
         }
         
         try {
-            $app['singular.service.front_controller']->create($controlador, $modulo, $dir, $author, $email);
+            $app['singular.service.front_controller']->create($controlador, $modulo, $dir, $type, $author, $email);
             $output->writeln(sprintf('<info>Controlador "%s" criado com sucesso!</info>',$controlador));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));

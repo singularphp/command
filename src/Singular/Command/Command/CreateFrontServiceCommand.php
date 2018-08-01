@@ -13,39 +13,28 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Otávio Fernandes <otavio@netonsolucoes.com.br>
  */
-class CreateFrontStoreCommand extends Command
+class CreateFrontServiceCommand extends Command
 {
     /**
      * Configura o comando.
      */
     public function configure()
     {
-        $this->setName('frontend:create-store')
-            ->setDescription('Cria um store de frontend na aplicação')
+        $this->setName('frontend:create-service')
+            ->setDescription('Cria um serviço de frontend na aplicação')
             ->setHelp(
-                'Para criar um novo store, informe o nome do store a ser criado, 
-                o módulo, o pacote backend e o controlador backend e o diretório do módulo. 
-                Ex.: singular frontend:create-store Usuario singular.usuario sessao usuario secure/cadastro/usuario'
+                'Para criar um novo serviço, informe o nome do serviço a ser criado, o namespace do módulo e o diretório do módulo. 
+    Exemplo: <info>singular frontend:create-service Usuario singular.usuario secure/cadastro/usuario</info>'
             )
             ->addArgument(
-                'store',
+                'service',
                 InputArgument::REQUIRED,
-                'Nome do store a ser criado. Ex.: Usuario'
+                'Nome do serviço a ser criado. Ex.: UsuarioService'
             )
             ->addArgument(
                 'modulo',
                 InputArgument::REQUIRED,
                 'Nome do módulo onde o controlador será criado. Ex.: cadastro.usuario'
-            )
-            ->addArgument(
-                'pack',
-                InputArgument::REQUIRED,
-                'Pacote de backend para chamada remota. Ex.: sessao'
-            )
-            ->addArgument(
-                'controlador',
-                InputArgument::REQUIRED,
-                'Controlador de backend para chamada remota. Ex.: usuario'
             )
             ->addArgument(
                 'dir',
@@ -75,11 +64,9 @@ class CreateFrontStoreCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
-        $store = $input->getArgument('store');
+        $service = $input->getArgument('service');
         $modulo = $input->getArgument('modulo');
         $dir = $input->getArgument('dir');
-        $pack = $input->getArgument('pack');
-        $controlador = $input->getArgument('controlador');
 
         $author = $input->getOption('author');
         
@@ -102,8 +89,8 @@ class CreateFrontStoreCommand extends Command
         }
         
         try {
-            $app['singular.service.front_store']->create($store, $modulo, $pack, $controlador, $dir, $author, $email);
-            $output->writeln(sprintf('<info>Store "%s" criado com sucesso!</info>',$store));
+            $app['singular.service.front_service']->create($service, $modulo, $dir, $author, $email);
+            $output->writeln(sprintf('<info>Serviço "%s" criado com sucesso!</info>',$service));
         } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
         }

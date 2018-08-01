@@ -10,14 +10,13 @@
     angular.module('$module').controller(
         '$name',
         [
-            '$scope',
-            '$state',
-            '$modal',
-            '$modalInstance,
-            '$localStorage',
-            'SweetAlert',
-            'toaster',
-            Controller
+            '$scope'
+            ,'$state'
+            ,'$uibModal'
+            ,'SweetAlert'
+            ,'toaster'
+            ,'$sngApi'
+            ,Controller
         ]
     );
 
@@ -27,23 +26,27 @@
      * @param $scope
      * @param $state
      * @param $modal
-     * @param $modalInstance
-     * @param $localStorage
      * @param SweetAlert
      * @param toaster
+     * @param $sngApi
      * @constructor
      */
     function Controller(
-        $scope,
-        $state,
-        $modal,
-        $modalInstance,
-        $localStorage,
-        SweetAlert,
-        toaster
+         $scope
+        ,$state
+        ,$modal
+        ,SweetAlert
+        ,toaster
+        ,$sngApi
     ) {
+        /**
+         * Inicialização do controlador.
+         */
+        $scope.onInit = function(){
 
+        }
 
+        $scope.onInit();
     }
 
 }());

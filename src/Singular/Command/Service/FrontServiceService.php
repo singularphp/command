@@ -5,7 +5,7 @@ namespace Singular\Command\Service;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
-class FrontStoreService
+class FrontServiceService
 {
     /**
      * Diretório raiz do código javascript da aplicação.
@@ -30,15 +30,13 @@ class FrontStoreService
      *
      * @param string $name
      * @param string $module
-     * @param string $pack
-     * @param string $controller
      * @param string $dir
      * @param string $author
      * @param string $email
      *
      * @throws \Exception
      */
-    public function create($name, $module, $pack, $controller, $dir, $author, $email)
+    public function create($name, $module, $dir, $author, $email)
     {
         $fs = new Filesystem();
 
@@ -52,13 +50,13 @@ class FrontStoreService
             throw new \Exception(sprintf('O módulo %s não existe!', $module));
         }
 
-        $storeFile = $this->getStoreFile($name, $moduleDir);
+        $serviceFile = $this->getServiceFile($name, $moduleDir);
 
-        if ($fs->exists($storeFile)) {
-            throw new \Exception(sprintf('O store %s já existe!', $name));
+        if ($fs->exists($serviceFile)) {
+            throw new \Exception(sprintf('O serviço %s já existe!', $name));
         }
 
-        $this->createStore($name, $storeFile, $module, $pack, $controller, $author, $email);
+        $this->createService($name, $serviceFile, $module, $author, $email);
     }
 
     /**
@@ -81,33 +79,48 @@ class FrontStoreService
      *
      * @return string
      */
-    private function getStoreFile($name, $moduleDir)
+    private function getServiceFile($name, $moduleDir)
     {
-        return $moduleDir.DIRECTORY_SEPARATOR."services".DIRECTORY_SEPARATOR.$name."Store";
+        return $moduleDir.DIRECTORY_SEPARATOR."services".DIRECTORY_SEPARATOR.$name."Service";
     }
 
     /**
      * Cria o script do controlador de frontend.
      *
      * @param string $name
-     * @param string $storeFile
+     * @param string $serviceFile
      * @param string $module
      * @param string $author
      * @param string $email
      */
-    private function createStore($name, $storeFile, $module, $pack, $controller, $author, $email)
+    private function createService($name, $serviceFile, $module, $author, $email)
     {
         $template = file_get_contents(
-            __DIR__.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."front_store.tpl"
+            __DIR__.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."front_service.tpl"
         );
 
+        $name = $this->getModuleFileName($module).'.'.$name;
+
         $template = str_replace('$name', $name, $template);
-        $template = str_replace('$PACK', $pack, $template);
-        $template = str_replace('$CONTROLLER', $controller, $template);
         $template = str_replace('$module',$module, $template);
         $template = str_replace('$author', $author, $template);
         $template = str_replace('$email', $email, $template);
 
-        file_put_contents($storeFile.'.js', $template);
+        file_put_contents($serviceFile.'.js', $template);
     }
+
+    /**
+     * Recupera o nome do arquivo do módulo.
+     *
+     * @param string $module
+     *
+     * @return string
+     */
+    private function getModuleFileName($module)
+    {
+        list($namespace, $script) = explode('.', $module);
+
+        return $script;
+    }
+
 }

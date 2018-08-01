@@ -23,9 +23,8 @@ class CreateFrontViewCommand extends Command
         $this->setName('frontend:create-view')
             ->setDescription('Cria uma view de frontend para um módulo na aplicação')
             ->setHelp(
-                'Para criar uma nova view, informe o nome da view a ser criada, 
-                e o diretório do módulo. 
-                Ex.: singular frontend:create-view usuario.form cadastro/usuario'
+                'Para criar uma nova view, informe o nome da view a ser criada, e o diretório do módulo destino. Opcionalmente, informe o tipo. 
+Exemplo: <info>singular frontend:create-view usuario.form cadastro/usuario --type=form</info>'
             )
             ->addArgument(
                 'view',

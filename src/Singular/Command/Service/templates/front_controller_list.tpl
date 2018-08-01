@@ -1,0 +1,98 @@
+(function()
+{
+    'use strict';
+
+    /**
+     * Controlador responsável por funcionalidade de listagem.
+     *
+     * @author $author <$email>
+     */
+    angular.module('$module').controller(
+        '$name',
+        [
+            '$scope'
+            ,'toaster'
+            ,'$sngApi'
+            ,'$sngFilter'
+            ,Controller
+        ]
+    );
+
+    /**
+     * Função de definição do controlador.
+     *
+     * @param $scope
+     * @param toaster
+     * @param $sngApi
+     * @param $sngFilter
+     * @constructor
+     */
+    function Controller(
+         $scope
+        ,toaster
+        ,$sngApi
+        ,$sngFilter
+    ) {
+        /**
+         * Referência local ao serviço do filtro.
+         *
+         * @todo Alterar a url do template
+         * @type {$sngApi}
+         */
+        $scope.filtro = $sngFilter('url_template_do_filtro');
+
+        /**
+         * Api de comunicação com o controlador no backend.
+         *
+         * @todo Alterar o valor do pacote/controlador
+         * @type {$sngApi}
+         */
+        $scope.api = $sngApi('pacote/controlador', $scope.filtro);
+
+        /**
+         * Configuração de ordenação padrão.
+         *
+         * @type {string}
+         */
+        $scope.sort = null;
+
+        /**
+         * Registros que serão exibidos na interface.
+         *
+         * @type {Array}
+         */
+        $scope.records = [];
+
+        /**
+         * Inicialização do controlador.
+         */
+        $scope.onInit = function(){
+            $scope.reloadData();
+        };
+
+        /**
+         * Recarrega a lista de registros.
+         */
+        $scope.reloadData = function(){
+            $scope.api.find($scope.sort).then(function(results){
+                $scope.records = results;
+            });
+        };
+
+        /**
+         * Remove um registro pelo seu id.
+         *
+         * @param {int} id
+         */
+        $scope.remove = function (id) {
+            $scope.api.remove(id, function(response) {
+                if (response) {
+                    $scope.reloadData();
+                }
+            });
+        };
+
+        $scope.onInit();
+    }
+
+}());

@@ -17,6 +17,7 @@ use Singular\Command\Command\EnablePackCommand;
 use Singular\Command\Command\GrantFullAccessCommand;
 use Singular\Command\Service\CommandService;
 use Singular\Command\Service\ControllerService;
+use Singular\Command\Service\ModuleServiceService;
 use Singular\Command\Service\PackService;
 use Singular\Command\Service\ServiceService;
 use Singular\Command\Service\StoreService;
@@ -27,8 +28,8 @@ use Singular\Command\Service\FrontControllerService;
 use Singular\Command\Command\CreateFrontViewCommand;
 use Singular\Command\Service\FrontViewService;
 use Singular\Command\Service\ComponentService;
-use Singular\Command\Service\FrontStoreService;
-use Singular\Command\Command\CreateFrontStoreCommand;
+use Singular\Command\Service\FrontServiceService;
+use Singular\Command\Command\CreateFrontServiceCommand;
 
 class CommandServiceProvider implements ServiceProviderInterface, BootableProviderInterface
 {
@@ -80,14 +81,20 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
             );
         };
 
+        $pimple['singular.service.module_service'] = function() use ($pimple) {
+            return new ModuleServiceService(
+                $pimple['injector.directory.src']
+            );
+        };
+
         $pimple['singular.service.front_controller'] = function() use ($pimple) {
             return new FrontControllerService(
                 $pimple['injector.directory.src']
             );
         };
 
-        $pimple['singular.service.front_store'] = function() use ($pimple) {
-            return new FrontStoreService(
+        $pimple['singular.service.front_service'] = function() use ($pimple) {
+            return new FrontServiceService(
                 $pimple['injector.directory.src']
             );
         };
@@ -141,8 +148,8 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
             return new CreateFrontControllerCommand();
         };
 
-        $pimple['singular.command.create_front_store'] = function () {
-            return new CreateFrontStoreCommand();
+        $pimple['singular.command.create_front_service'] = function () {
+            return new CreateFrontServiceCommand();
         };
 
         $pimple['singular.command.create_front_view'] = function () {
@@ -180,7 +187,7 @@ class CommandServiceProvider implements ServiceProviderInterface, BootableProvid
         $app['console']->add($app['singular.command.create_store']);
         $app['console']->add($app['singular.command.create_module']);
         $app['console']->add($app['singular.command.create_front_controller']);
-        $app['console']->add($app['singular.command.create_front_store']);
+        $app['console']->add($app['singular.command.create_front_service']);
         $app['console']->add($app['singular.command.create_front_view']);
         $app['console']->add($app['singular.command.create_component_migration']);
         $app['console']->add($app['singular.command.grant_full_access']);

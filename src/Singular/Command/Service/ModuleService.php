@@ -49,8 +49,10 @@ class ModuleService
             throw new \Exception(sprintf('O módulo %s já foi criado!', $module));
         }
 
-        $this->createDirectories($moduleDir);
+        $this->createDirectories($moduleDir, $module);
         $this->createModule($module, $moduleDir, $dir, $author, $email);
+
+        return $moduleDir;
     }
 
     /**
@@ -129,8 +131,9 @@ class ModuleService
      * Cria os diretórios do pacote.
      *
      * @param string $moduleDir
+     * @param string $module
      */
-    private function createDirectories($moduleDir)
+    private function createDirectories($moduleDir, $module)
     {
         $fs = new Filesystem();
 
