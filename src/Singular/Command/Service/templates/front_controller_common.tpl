@@ -44,7 +44,7 @@
          */
         $scope.onInit = function(){
 
-        }
+        };
 
         $scope.onInit();
     }

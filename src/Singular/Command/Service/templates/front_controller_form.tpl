@@ -36,6 +36,7 @@
         /**
          * Define que o formulário está em estado de visualização.
          *
+         * @todo Alterar o valor do view state
          * @type {string}
          */
         $scope.viewState = 'show';
