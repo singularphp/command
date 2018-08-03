@@ -12,6 +12,7 @@
         [
             '$scope'
             ,'$state'
+            ,'$stateParams'
             ,'$uibModal'
             ,'SweetAlert'
             ,'toastr'
@@ -25,6 +26,7 @@
      *
      * @param $scope
      * @param $state
+     * @param $stateParams
      * @param $modal
      * @param SweetAlert
      * @param toastr
@@ -34,6 +36,7 @@
     function Controller(
          $scope
         ,$state
+        ,$stateParams
         ,$modal
         ,SweetAlert
         ,toastr

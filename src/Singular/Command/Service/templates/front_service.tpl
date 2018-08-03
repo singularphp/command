@@ -23,7 +23,9 @@
     function Service(
         $sngApi
     ) {
-        var me = this;
+        var me = {
+            // definição da interface do serviço
+        };
 
         return me;
     }
