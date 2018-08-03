@@ -50,7 +50,7 @@
          * @todo Alterar a url do template
          * @type {$sngPaging}
          */
-        $scope.paging = $sngFilter();
+        $scope.paging = $sngPaging();
 
         /**
          * Api de comunicação com o controlador no backend.

@@ -14,7 +14,7 @@
                 <span ng-if="isSaving">Salvando...</span>
             </button>
 
-            <button type="button" class="btn btn-info btn-addon pull-right m-r-xs" ng-if="viewState == 'show'" ui-sref="app.$VIEW-edit({id: $VIEW.id})">
+            <button type="button" class="btn btn-info btn-addon pull-right m-r-xs" ng-if="viewState == 'show'" ui-sref="app.$VIEW-edit({id: record.id})">
                 <i class="fa fa-edit"></i> Editar
             </button>
 

@@ -12,6 +12,7 @@
         [
              '$scope'
             ,'$state'
+            ,'$stateParams'
             ,'toastr'
             ,'$sngApi'
             ,Controller
@@ -23,6 +24,7 @@
      *
      * @param $scope
      * @param $state
+     * @param $stateParams
      * @param toastr
      * @param $sngApi
      * @constructor
@@ -30,6 +32,7 @@
     function Controller(
          $scope
         ,$state
+        ,$stateParams
         ,toastr
         ,$sngApi
     ) {
