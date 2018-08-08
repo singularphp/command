@@ -152,8 +152,12 @@ class ModuleService
      */
     private function getModuleFileName($module)
     {
-        list($namespace, $script) = explode('.', $module);
+        $parts = explode('.', $module);
 
-        return $script;
+        if (count($parts) > 1) {
+            return $parts[1];
+        }
+
+        return $module;
     }
 }
