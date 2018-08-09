@@ -150,6 +150,5 @@ class PackService
         $fs->mkdir($packDir.DIRECTORY_SEPARATOR."Controller");
         $fs->mkdir($packDir.DIRECTORY_SEPARATOR."Service");
         $fs->mkdir($packDir.DIRECTORY_SEPARATOR."Store");
-        $fs->mkdir($packDir.DIRECTORY_SEPARATOR."Model");
     }
 }
