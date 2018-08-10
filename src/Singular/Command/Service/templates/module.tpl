@@ -25,12 +25,12 @@
     function configFn(
         $stateProvider
     ){
-        $stateProvider.state('', {
+        /* $stateProvider.state('', {
             url: '',
             controller: '',
             templateUrl: getView('')
         })
-        ;
+        ;*/
     }
 
     /**
